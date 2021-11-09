@@ -18,12 +18,12 @@ class RouletteSelection(object):
     def __call__(self, population, fitness_score_list):
         return self.selection(population, fitness_score_list)
 
-    # Chromosomes with bigger fitness will be selected more times
+    # Los cromosomas con mayor fitness van a ser seleccionados mas tiempo.
     @staticmethod
     def selection(population, fitness_scores_list):
         new_population = []
 
-        # Remove maximum value from every element so roulette selection will rely on bigger difference
+        # Elimina el máximo de cada elemento, así la selección ruleta dependerá de una diferencia mayor.
         worst_result = np.min(fitness_scores_list)
         fitness_scores_list = list(map(lambda value: value - worst_result, fitness_scores_list))
 

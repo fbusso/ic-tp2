@@ -19,7 +19,7 @@ class BasicMutation(object):
     def __call__(self, population):
         return self.mutate_population(population)
 
-    # In TSP and QAP problem mutation will have slightly different form. We will choose two genes and swap them.
+    # Se eligen dos genes aleatorios y se los intercambian.
     @staticmethod
     def mutate_population(population):
         chromosomes_with_mutated = []

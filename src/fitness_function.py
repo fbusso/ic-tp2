@@ -1,12 +1,11 @@
 import numpy as np
 
 
-# Summary: The objective of the Quadratic Assignment Problem (QAP) is to assign n facilities to n locations in such a
-#  way as to minimize the assignment cost.
+# El objetivo del problema de asignación cuadrática es asignar n edificios a n localizaciones de tal forma de
+# minimizar el costo
 #
-# The assignment cost is the sum, over all pairs, of the flow between a pair
-#  of facilities multiplied by the distance between their assigned locations.
-
+# El costo se calcula como la suma, sobre todos los pares, del flujo de personas entre cada par de
+# edificios, multiplicado por la distancia entre ellos.
 
 def compute_fitness_scores_list(population, distance_matrix, flow_matrix):
     matrices_size = distance_matrix.shape[0]
