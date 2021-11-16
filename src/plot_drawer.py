@@ -14,18 +14,18 @@ class PlotDrawer:
             x=generations + generations_rev,
             y=max_results + min_results,
             fill='tozerox',
-            fillcolor='rgba(0,100,80,0.2)',
-            line=Line(color='transparent'),
+            fillcolor='rgb(0,100,80)',
+            line=Line(color='rgb(0,80,80)'),
             showlegend=True,
-            name='Max and min',
+            name='Máximo y Mínimo',
         )
 
         average_trace = Scatter(
             x=generations,
             y=average_results,
-            line=Line(color='rgb(0,100,80)'),
+            line=Line(color='rgb(200,80,80)'),
             mode='lines',
-            name='Average',
+            name='Promedio',
         )
 
         data = Data([max_and_min_trace, average_trace])

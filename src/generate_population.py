@@ -1,10 +1,10 @@
 import random
 
 
-def generate_random_population(number_of_objects, number_of_random_chromosomes):
-    population_list = []
+def generar_poblacion_aleatoria(number_of_objects, number_of_random_chromosomes):
+    poblacion = []
     for _ in range(number_of_random_chromosomes):
-        rand_chromosome = list(range(number_of_objects))
-        random.shuffle(rand_chromosome)
-        population_list.append(rand_chromosome)
-    return population_list
+        cromosoma_aleatorio = list(range(number_of_objects))
+        random.shuffle(cromosoma_aleatorio)
+        poblacion.append(cromosoma_aleatorio)
+    return poblacion

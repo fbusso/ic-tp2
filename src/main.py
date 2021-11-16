@@ -5,78 +5,77 @@ import time
 import numpy as np
 
 from src.config import POPULATION_SIZE, NUMBER_OF_GENERATIONS, DRAW_VISUALIZATION, INPUT_FILE, DRAW_CHART
-from src.crossover import BasicCrossover, Crossover
-from src.data_loading import matrices_size, flow_matrix, distance_matrix
-from src.fitness_function import get_normalized_result_of_fitness_function_scores_list, compute_fitness_scores_list
-from src.generate_population import generate_random_population
-from src.mutation import Mutation, BasicMutation
+from src.cruza import CruzaBasica, Cruza
+from src.data_loading import tamanio_matrices, flujos, distancias
+from src.fitness_function import obtener_puntajes_fitness_normalizados, obtener_fitness
+from src.generate_population import generar_poblacion_aleatoria
+from src.mutacion import Mutacion, MutacionBasica
 from src.plot_drawer import PlotDrawer
-from src.selection import Selection, RouletteSelection
+from src.seleccion import Seleccion, SeleccionTorneo
 from src.visualization_drawer import CustomDrawer
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-selection_strategy = Selection(selection_algorithm=RouletteSelection())
-mutation_strategy = Mutation(mutation_algorithm=BasicMutation())
-crossover_strategy = Crossover(crossover_algorithm=BasicCrossover())
+estrategia_seleccion = Seleccion(selection_algorithm=SeleccionTorneo())
+estrategia_mutacion = Mutacion(estrategia=MutacionBasica())
+estrategia_cruza = Cruza(crossover_algorithm=CruzaBasica())
 
 
 def main():
-    population = generate_random_population(matrices_size, POPULATION_SIZE)
+    poblacion = generar_poblacion_aleatoria(tamanio_matrices, POPULATION_SIZE)
 
-    visualization_drawer = CustomDrawer()
-    plot_drawer = PlotDrawer()
+    graficador_custom = CustomDrawer()
+    graficador = PlotDrawer()
 
-    generation_indicies = []
-    average_results = []
-    min_results = []
-    max_results = []
-    previous_max_chromosome = []
+    indices_generacion = []
+    resultados_promedio = []
+    resultados_minimos = []
+    resultados_maximos = []
+    ultimo_mejor_cromosoma = []
 
     def draw_visual_frame():
-        visualization_drawer.draw_generation_frame(max_chromosome, epoch, max_fitness, max_chromosome, flow_matrix,
-                                                   distance_matrix)
+        graficador_custom.draw_generation_frame(mejor_cromosoma, epoch, mejor_fitness, mejor_cromosoma, flujos,
+                                                distancias)
         time.sleep(1)
         return
 
-    def print_console_output():
-        print("Epoch: \t\t\t\t{}\nMean fit.: \t\t\t{}\nMax score: \t\t\t{}\nMax chrom.: \t\t{}\n\n"
-              .format(epoch, average_fitness, max_fitness, max_chromosome))
+    def imprimir_epoch():
+        print("Epoch: \t\t\t\t\t{}\nFitness Medio: \t\t\t{}\nMejor Fitness: \t\t\t{}\nMejor Cromosoma: \t\t{}\n\n"
+              .format(epoch, fitness_medio, mejor_fitness, mejor_cromosoma))
 
     for epoch in range(NUMBER_OF_GENERATIONS):
 
-        fitness_scores = compute_fitness_scores_list(population, distance_matrix, flow_matrix)
-        fitness_scores_normalized = get_normalized_result_of_fitness_function_scores_list(fitness_scores)
+        puntajes_fitness = obtener_fitness(poblacion, distancias, flujos)
+        puntajes_fitness_normalizados = obtener_puntajes_fitness_normalizados(puntajes_fitness)
 
-        # While it's not normalized yet, max means "the worst", therefore "min" for us.
-        max_fitness = np.min(fitness_scores)
-        min_fitness = np.max(fitness_scores)
-        average_fitness = np.mean(fitness_scores)
+        mejor_fitness = np.min(puntajes_fitness)
+        min_fitness = np.max(puntajes_fitness)
+        fitness_medio = np.mean(puntajes_fitness)
 
-        max_results.append(max_fitness)
-        min_results.append(min_fitness)
-        average_results.append(average_fitness)
-        generation_indicies.append(epoch)
+        resultados_maximos.append(mejor_fitness)
+        resultados_minimos.append(min_fitness)
+        resultados_promedio.append(fitness_medio)
+        indices_generacion.append(epoch)
 
-        max_chromosome = population[np.argmin(fitness_scores)]
-        max_chromosome = list(map(lambda value: value + 1, max_chromosome))
+        mejor_cromosoma = poblacion[np.argmin(puntajes_fitness)]
+        mejor_cromosoma = list(map(lambda value: value + 1, mejor_cromosoma))
 
-        selected_chromosomes = selection_strategy.select(population, fitness_scores_normalized)
-        crossed_chromosomes = crossover_strategy.crossover(selected_chromosomes)
-        mutated_chromosomes = mutation_strategy.mutate(crossed_chromosomes)
+        cromosomas_seleccionados = estrategia_seleccion.select(poblacion, puntajes_fitness_normalizados)
+        cromosomas_cruzados = estrategia_cruza.cruza(cromosomas_seleccionados)
+        cromosomas_mutados = estrategia_mutacion.mutate(cromosomas_cruzados)
 
-        print_console_output()
-        if DRAW_VISUALIZATION and previous_max_chromosome != max_chromosome:
+        imprimir_epoch()
+        if DRAW_VISUALIZATION and ultimo_mejor_cromosoma != mejor_cromosoma:
             draw_visual_frame()
 
-        previous_max_chromosome = max_chromosome
+        ultimo_mejor_cromosoma = mejor_cromosoma
 
-        population = mutated_chromosomes
+        poblacion = cromosomas_mutados
 
     if DRAW_CHART:
-        plot_drawer.drawPlot(INPUT_FILE, generation_indicies, average_results, max_results, min_results)
+        graficador.drawPlot(INPUT_FILE, indices_generacion, resultados_promedio, resultados_maximos, resultados_minimos)
 
-    visualization_drawer.screen.mainloop()
+    graficador_custom.screen.mainloop()
 
 
 if __name__ == "__main__":

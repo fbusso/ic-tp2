@@ -5,20 +5,20 @@ import numpy as np
 from src.config import INPUT_FILE
 
 
-def read_square_matrix(matrix_file) -> np.ndarray:
-    matrix = []
-    row_counter = 0
-    while row_counter < matrices_size:
-        line = matrix_file.readline()
-        assert isinstance(line, str)
-        if not line.isspace():
-            row_counter += 1
-            matrix_row = [int(element) for element in line.split(sep=' ') if element != '']
-            matrix.append(matrix_row)
-    return np.array(matrix)
+def leer_matriz(matrix_file) -> np.ndarray:
+    matriz = []
+    contador_filas = 0
+    while contador_filas < tamanio_matrices:
+        linea = matrix_file.readline()
+        assert isinstance(linea, str)
+        if not linea.isspace():
+            contador_filas += 1
+            fila = [int(valor) for valor in linea.split(sep=' ') if valor != '']
+            matriz.append(fila)
+    return np.array(matriz)
 
 
-with open(os.path.join('../res', 'data', INPUT_FILE), mode='r') as file:
-    matrices_size = int(file.readline())
-    distance_matrix = read_square_matrix(file)
-    flow_matrix = read_square_matrix(file)
+with open(os.path.join('../res', 'data', INPUT_FILE), mode='r') as archivo:
+    tamanio_matrices = int(archivo.readline())
+    distancias = leer_matriz(archivo)
+    flujos = leer_matriz(archivo)

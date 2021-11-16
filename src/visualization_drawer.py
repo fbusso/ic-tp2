@@ -92,12 +92,12 @@ class CustomDrawer(turtle.Turtle):
         self.penup()
         self.goto(-self.screen.window_width() / 2 + CustomDrawer.CAPTIONS_MARGIN,
                   self.screen.window_height() / 2 - CustomDrawer.CAPTIONS_MARGIN)
-        self.write(f'Best chromosome: {best_chromosome}', font=CustomDrawer.FONT_CONFIG)
+        self.write(f'Mejor cromosoma: {best_chromosome}', font=CustomDrawer.FONT_CONFIG)
         self.right(90)
         self.forward(20)
-        self.write(f'Generation number: {generation_number}', font=CustomDrawer.FONT_CONFIG)
+        self.write(f'Número de Generación: {generation_number}', font=CustomDrawer.FONT_CONFIG)
         self.forward(20)
-        self.write(f'Best score: {best_score}', font=CustomDrawer.FONT_CONFIG)
+        self.write(f'Mejor Fitness: {best_score}', font=CustomDrawer.FONT_CONFIG)
 
         self.left(90)
         self.goto(start_position[0], start_position[1])
